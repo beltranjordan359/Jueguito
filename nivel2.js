@@ -1,0 +1,365 @@
+document.addEventListener("DOMContentLoaded", iniciarJuego);
+
+let tiempoRestante = 300;
+let tiempoTotal = 300;
+let puntaje = 300;
+let progreso = 0;
+let juegoFinalizado = false;
+let intervaloTiempo;
+let misionActual = 0;
+
+const pistas = {
+    computadora: false,
+    qr1: false,
+    qr2: false,
+    qr3: false,
+    qr4: false
+};
+
+function iniciarJuego() {
+    actualizarInterfaz();
+    intervaloTiempo = setInterval(() => {
+        if (juegoFinalizado) {
+            return;
+        }
+
+        tiempoRestante = Math.max(0, tiempoRestante - 1);
+        actualizarInterfaz();
+
+        if (tiempoRestante === 0) {
+            clearInterval(intervaloTiempo);
+            mostrarMensaje("Se agotó el tiempo. La puerta se ha cerrado.");
+        }
+    }, 1000);
+}
+
+function formatearTiempo(segundos) {
+    const minutos = String(Math.floor(segundos / 60)).padStart(2, "0");
+    const resto = String(segundos % 60).padStart(2, "0");
+    return `${minutos}:${resto}`;
+}
+
+function reproducirSonido(id) {
+    const audio = document.getElementById(id);
+    if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+    }
+}
+
+function mostrarMensaje(texto) {
+    const mensaje = document.getElementById("mensaje");
+    if (mensaje) {
+        mensaje.textContent = texto;
+    }
+}
+
+function actualizarInterfaz() {
+    const tiempoEl = document.getElementById("tiempo");
+    const puntosEl = document.getElementById("puntos");
+    const avanceEl = document.getElementById("avance");
+
+    if (tiempoEl) {
+        tiempoEl.textContent = formatearTiempo(tiempoRestante);
+    }
+
+    if (puntosEl) {
+        puntosEl.textContent = puntaje;
+    }
+
+    const completadas = Object.values(pistas).filter(Boolean).length;
+    progreso = Math.min(100, Math.round((completadas / 5) * 100));
+
+    if (avanceEl) {
+        avanceEl.textContent = `${progreso}%`;
+        avanceEl.style.width = `${progreso}%`;
+    }
+}
+
+function completarPista(nombre) {
+    if (pistas[nombre]) {
+        return;
+    }
+
+    pistas[nombre] = true;
+    reproducirSonido("correcto");
+    ajustarPuntaje();
+}
+
+function ajustarPuntaje() {
+    const completadas = Object.values(pistas).filter(Boolean).length;
+    const tiempoUsado = tiempoTotal - tiempoRestante;
+    puntaje = Math.max(100, 300 - tiempoUsado + completadas * 15);
+    actualizarInterfaz();
+}
+
+function abrirModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+function cerrarModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+function mostrarMision(titulo, pregunta, opciones, numeroMision) {
+    reproducirSonido("clic");
+    const tituloEl = document.getElementById("tituloMision");
+    const preguntaEl = document.getElementById("preguntaMision");
+    const respuestas = document.querySelectorAll(".respuesta");
+
+    if (tituloEl) {
+        tituloEl.textContent = titulo;
+    }
+
+    if (preguntaEl) {
+        preguntaEl.innerHTML = pregunta;
+    }
+
+    respuestas.forEach((boton, index) => {
+        boton.textContent = `${String.fromCharCode(65 + index)}) ${opciones[index]}`;
+    });
+
+    misionActual = numeroMision;
+    abrirModal("ventanaMision");
+}
+
+function mision1() {
+    mostrarMision(
+        "Misión 1: El mensaje oculto",
+        "¿Qué elemento del laboratorio está relacionado con el acceso a la puerta?",
+        ["Pizarra", "Silla", "Panel de seguridad", "Mapa"],
+        1
+    );
+}
+
+function mision2() {
+    if (!pistas.computadora) {
+        mostrarMensaje("Primero debes completar la misión de la computadora.");
+        return;
+    }
+
+    mostrarMision(
+        "Misión 2: El libro perdido",
+        "¿Cuál es el objetivo principal del método de Gauss?",
+        [
+            "Convertir la matriz en una forma escalonada para resolver el sistema",
+            "Calcular únicamente el determinante",
+            "Multiplicar todas las filas por un mismo número",
+            "Encontrar la matriz identidad directamente"
+        ],
+        2
+    );
+}
+
+function mision3() {
+    if (!pistas.qr1) {
+        mostrarMensaje("Primero debes encontrar la pista del librero.");
+        return;
+    }
+
+    mostrarMision(
+        "Misión 3: El laboratorio",
+        "¿Qué propiedad permite intercambiar filas en una matriz sin cambiar la solución del sistema?",
+        ["Propiedad conmutativa", "Propiedad de equivalencia de sistemas", "Propiedad distributiva", "Propiedad asociativa"],
+        3
+    );
+}
+
+function mision4() {
+    if (!pistas.qr2) {
+        mostrarMensaje("Primero debes encontrar la segunda pista.");
+        return;
+    }
+
+    mostrarMision(
+        "Misión 4: La ventana",
+        "¿Qué se obtiene al resolver un sistema de ecuaciones con el método de Gauss-Jordan?",
+        ["La matriz escalonada reducida", "Un vector unitario", "Una matriz triangular inferior", "La inversa de la matriz original"],
+        4
+    );
+}
+
+function respuesta(opcion) {
+    if (misionActual === 1) {
+        if (opcion === 4) {
+            completarPista("computadora");
+            mostrarMensaje("Respuesta correcta. La primera pista quedó registrada.");
+            const qr1 = document.getElementById("qr1");
+            if (qr1) {
+                qr1.style.display = "block";
+            }
+            document.getElementById("librero").setAttribute("onclick", "mision2()");
+            cerrarModal("ventanaMision");
+        } else {
+            reproducirSonido("incorrecto");
+            mostrarMensaje("Respuesta incorrecta. Revisa la pista del laboratorio.");
+        }
+        return;
+    }
+
+    if (misionActual === 2) {
+        if (opcion === 1) {
+            completarPista("qr1");
+            mostrarMensaje("Respuesta correcta. La pista del librero ya está activa.");
+            const qr2 = document.getElementById("qr2");
+            if (qr2) {
+                qr2.style.display = "block";
+            }
+            document.getElementById("laboratorio").setAttribute("onclick", "mision3()");
+            cerrarModal("ventanaMision");
+        } else {
+            reproducirSonido("incorrecto");
+            mostrarMensaje("Respuesta incorrecta. Analiza mejor el procedimiento de Gauss.");
+        }
+        return;
+    }
+
+    if (misionActual === 3) {
+        if (opcion === 2) {
+            completarPista("qr2");
+            mostrarMensaje("Respuesta correcta. La pista del laboratorio quedó activa.");
+            const qr3 = document.getElementById("qr3");
+            if (qr3) {
+                qr3.style.display = "block";
+            }
+            document.getElementById("ventana").setAttribute("onclick", "mision4()");
+            cerrarModal("ventanaMision");
+        } else {
+            reproducirSonido("incorrecto");
+            mostrarMensaje("Respuesta incorrecta.");
+        }
+        return;
+    }
+
+    if (misionActual === 4) {
+        if (opcion === 1) {
+            completarPista("qr3");
+            mostrarMensaje("Respuesta correcta. La última pista quedó activa.");
+            const qr4 = document.getElementById("qr4");
+            if (qr4) {
+                qr4.style.display = "block";
+            }
+            cerrarModal("ventanaMision");
+        } else {
+            reproducirSonido("incorrecto");
+            mostrarMensaje("Respuesta incorrecta.");
+        }
+    }
+}
+
+function bloqueado() {
+    reproducirSonido("incorrecto");
+    mostrarMensaje("Ese sector sigue sellado. Debes encontrar las pistas antes de avanzar.");
+}
+
+function leerQR1() {
+    if (pistas.qr1) {
+        mostrarMensaje("Ya revisaste esta pista.");
+        return;
+    }
+
+    completarPista("qr1");
+    document.getElementById("mensajeQR").textContent = "Pista 1: La puerta responde al código 1531.";
+    document.getElementById("imagenQR").src = "img/pista.png";
+    abrirModal("ventanaQR");
+}
+
+function leerQR2() {
+    if (pistas.qr2) {
+        mostrarMensaje("Ya revisaste esta pista.");
+        return;
+    }
+
+    completarPista("qr2");
+    document.getElementById("mensajeQR").textContent = "Pista 2: El laboratorio guarda la verdad en las cuatro cifras.";
+    document.getElementById("imagenQR").src = "img/pista.png";
+    abrirModal("ventanaQR");
+}
+
+function leerQR3() {
+    if (pistas.qr3) {
+        mostrarMensaje("Ya revisaste esta pista.");
+        return;
+    }
+
+    completarPista("qr3");
+    document.getElementById("mensajeQR").textContent = "Pista 3: El código está compuesto por cuatro números.";
+    document.getElementById("imagenQR").src = "img/pista.png";
+    abrirModal("ventanaQR");
+}
+
+function leerQR4() {
+    if (pistas.qr4) {
+        mostrarMensaje("Ya revisaste esta pista.");
+        return;
+    }
+
+    completarPista("qr4");
+    document.getElementById("mensajeQR").textContent = "Pista 4: El último número es 1 y el primero es 1.";
+    document.getElementById("imagenQR").src = "img/pista.png";
+    abrirModal("ventanaQR");
+}
+
+function abrirPuerta() {
+    const completadas = Object.values(pistas).filter(Boolean).length;
+    if (completadas < 5) {
+        mostrarMensaje("Aún faltan pistas por encontrar para abrir la puerta.");
+        return;
+    }
+
+    abrirModal("panelPuerta");
+}
+
+function verificarPuerta() {
+    const codigo = document.getElementById("codigoPuerta").value.trim();
+    if (codigo === "1531") {
+        finalizarJuego();
+    } else {
+        reproducirSonido("incorrecto");
+        mostrarMensaje("Código incorrecto. Revisa las pistas del laboratorio.");
+    }
+}
+
+function cerrarVentana() {
+    cerrarModal("ventanaMision");
+}
+
+function cerrarQR() {
+    cerrarModal("ventanaQR");
+}
+
+function cerrarPuerta() {
+    cerrarModal("panelPuerta");
+}
+
+function finalizarJuego() {
+    juegoFinalizado = true;
+    clearInterval(intervaloTiempo);
+    reproducirSonido("victoria");
+
+    const tiempoEmpleado = tiempoTotal - tiempoRestante;
+    document.getElementById("tiempoFinal").textContent = formatearTiempo(tiempoEmpleado);
+    document.getElementById("puntajeFinal").textContent = puntaje;
+    document.getElementById("puntajeGuardar").value = puntaje;
+    document.getElementById("tiempoGuardar").value = tiempoEmpleado;
+    document.getElementById("nivelGuardar").value = 3;
+    document.getElementById("rangoGuardar").value = calcularRango();
+
+    abrirModal("pantallaFinal");
+}
+
+function calcularRango() {
+    if (puntaje >= 450) {
+        return "Capitán";
+    }
+    if (puntaje >= 300) {
+        return "Teniente";
+    }
+    return "Agente";
+}

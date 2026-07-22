@@ -1,0 +1,1365 @@
+/*====================================================
+RESET
+====================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+
+    background:#08131d;
+
+    overflow:hidden;
+
+    color:white;
+
+}
+
+/*====================================================
+PANTALLA
+====================================================*/
+
+.pantalla{
+
+    width:100%;
+
+    height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:
+    radial-gradient(circle at top,#17385d,#08131d 70%);
+}
+
+/*====================================================
+PANEL SUPERIOR
+====================================================*/
+
+.panelSuperior{
+
+    height:95px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 45px;
+
+    background:linear-gradient(180deg,#122d4a,#0a1c31);
+
+    border-bottom:4px solid #25b7ff;
+
+    box-shadow:0 4px 20px rgba(0,0,0,.6);
+
+}
+
+.titulo h1{
+
+    font-size:38px;
+
+    letter-spacing:2px;
+
+    color:#ffffff;
+
+    text-shadow:0 0 12px #1fc9ff;
+
+}
+
+.titulo p{
+
+    margin-top:6px;
+
+    color:#bddcff;
+
+    font-size:18px;
+
+}
+
+.datosJugador{
+
+    display:flex;
+
+    gap:45px;
+
+}
+
+.dato{
+
+    text-align:center;
+
+}
+
+.dato span{
+
+    display:block;
+
+    color:#8dd8ff;
+
+    font-size:14px;
+
+}
+
+.dato strong{
+
+    font-size:23px;
+
+    color:white;
+
+}
+
+/*====================================================
+BARRA DEL JUEGO
+====================================================*/
+
+.barraJuego{
+
+    display:flex;
+
+    justify-content:space-around;
+
+    align-items:center;
+
+    padding:18px;
+
+    background:#10273f;
+
+    border-bottom:3px solid #215d8d;
+
+}
+
+.cronometro,
+.puntaje{
+
+    width:220px;
+
+    text-align:center;
+
+    font-size:20px;
+
+}
+
+#tiempo{
+
+    margin-top:8px;
+
+    font-size:38px;
+
+    color:#00ff88;
+
+    font-weight:bold;
+
+    text-shadow:0 0 10px #00ff88;
+
+}
+
+#puntos{
+
+    margin-top:8px;
+
+    font-size:38px;
+
+    color:#ffd93d;
+
+    font-weight:bold;
+
+    text-shadow:0 0 10px gold;
+
+}
+
+/*====================================================
+PROGRESO
+====================================================*/
+
+.progreso{
+
+    width:50%;
+
+}
+
+.progreso p{
+
+    margin-bottom:8px;
+
+    font-size:18px;
+
+}
+
+.barra{
+
+    width:100%;
+
+    height:30px;
+
+    background:#2d3b4d;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    border:2px solid #16385b;
+
+}
+
+#avance{
+
+    width:0%;
+
+    height:100%;
+
+    line-height:28px;
+
+    text-align:center;
+
+    color:white;
+
+    font-weight:bold;
+
+    background:linear-gradient(90deg,#18a6ff,#00ff99);
+
+    transition:all .4s;
+
+}
+
+/*====================================================
+MENSAJE
+====================================================*/
+
+.mensajeSistema{
+
+    background:#07121d;
+
+    padding:14px;
+
+    border-bottom:2px solid #18466f;
+
+    text-align:center;
+
+    font-size:20px;
+
+    color:#ffffff;
+
+}
+
+#mensaje{
+
+    width:85%;
+
+    margin:auto;
+
+}
+
+/*====================================================
+HABITACIÓN
+====================================================*/
+
+.habitacion{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#040b13;
+
+}
+
+.escenario{
+
+    position:relative;
+
+    width:1220px;
+
+    height:700px;
+
+    overflow:hidden;
+
+    border:6px solid #315d87;
+
+    border-radius:15px;
+
+    box-shadow:
+    0 0 40px rgba(0,0,0,.8),
+    inset 0 0 40px rgba(255,255,255,.05);
+
+}
+
+/*====================================================
+PARED
+====================================================*/
+
+.pared{
+
+    position:absolute;
+
+    width:100%;
+
+    height:66%;
+
+    background:
+
+    linear-gradient(
+
+    to bottom,
+
+    #294c70,
+
+    #1e3d5d,
+
+    #17324f
+
+    );
+
+}
+
+/*====================================================
+PISO
+====================================================*/
+
+.piso{
+
+    position:absolute;
+
+    bottom:0;
+
+    width:100%;
+
+    height:34%;
+
+    background:
+
+    repeating-linear-gradient(
+
+        90deg,
+
+        #21374d 0px,
+
+        #2b435a 40px,
+
+        #21374d 80px
+
+    );
+
+    border-top:8px solid #13283c;
+
+}
+
+/*====================================================
+LUCES
+====================================================*/
+
+.escenario::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:100%;
+
+    height:100%;
+
+    background:
+
+    radial-gradient(
+
+        circle at top,
+
+        rgba(255,255,255,.15),
+
+        transparent 65%
+
+    );
+
+    pointer-events:none;
+
+}
+
+/*====================================================
+CARTEL
+====================================================*/
+
+.cartel{
+
+    position:absolute;
+
+    top:20px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:#13283f;
+
+    border:4px solid #4aa8ff;
+
+    padding:12px 40px;
+
+    border-radius:10px;
+
+    font-size:28px;
+
+    letter-spacing:3px;
+
+    color:#bde7ff;
+
+    font-weight:bold;
+
+    box-shadow:
+
+    0 0 20px rgba(0,180,255,.5);
+
+}
+
+/*====================================================
+OBJETOS GENERALES
+====================================================*/
+
+.objeto{
+
+    position:absolute;
+
+    border:none;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.objeto:hover{
+
+    transform:scale(1.03);
+
+    filter:brightness(1.15);
+
+}
+
+/*====================================================
+LIBRERO
+====================================================*/
+
+#librero{
+
+    left:90px;
+    top:170px;
+
+    width:190px;
+    height:360px;
+
+    background:linear-gradient(to right,#5a371d,#7a5232,#5a371d);
+
+    border:8px solid #3a2211;
+
+    border-radius:4px;
+
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+
+}
+
+#librero::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:15px;
+
+    top:70px;
+
+    width:150px;
+
+    height:6px;
+
+    background:#2d1b0f;
+
+    box-shadow:
+    0 80px #2d1b0f,
+    0 160px #2d1b0f,
+    0 240px #2d1b0f;
+
+}
+
+#librero::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:25px;
+
+    top:20px;
+
+    width:15px;
+
+    height:300px;
+
+    background:#ff5252;
+
+    box-shadow:
+    18px 0 #2196f3,
+    36px 0 #4caf50,
+    54px 0 #ffc107,
+    72px 0 #9c27b0,
+    90px 0 #00bcd4,
+    108px 0 #ff9800,
+    126px 0 #795548;
+
+}
+
+/*====================================================
+ESCRITORIO
+====================================================*/
+
+.mesaComputadora{
+
+    position:absolute;
+
+    left:640px;
+
+    top:390px;
+
+    width:270px;
+
+    height:22px;
+
+    background:#654321;
+
+    border:5px solid #3d2615;
+
+    border-radius:4px;
+
+}
+
+.mesaComputadora::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:20px;
+
+    top:22px;
+
+    width:14px;
+
+    height:120px;
+
+    background:#3d2615;
+
+}
+
+.mesaComputadora::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:20px;
+
+    top:22px;
+
+    width:14px;
+
+    height:120px;
+
+    background:#3d2615;
+
+}
+
+/*====================================================
+COMPUTADORA
+====================================================*/
+
+#computadora{
+
+    left:690px;
+
+    top:250px;
+
+    width:170px;
+
+    height:120px;
+
+    background:#202020;
+
+    border:8px solid #444;
+
+    border-radius:6px;
+
+}
+
+#computadora::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:70px;
+
+    bottom:-22px;
+
+    width:24px;
+
+    height:22px;
+
+    background:#777;
+
+}
+
+#computadora::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:15px;
+
+    top:15px;
+
+    width:125px;
+
+    height:65px;
+
+    border-radius:4px;
+
+    background:linear-gradient(45deg,#0ea5e9,#6ee7ff);
+
+    animation:pantalla 2s infinite alternate;
+
+}
+
+@keyframes pantalla{
+
+    from{
+
+        filter:brightness(.8);
+
+    }
+
+    to{
+
+        filter:brightness(1.3);
+
+    }
+
+}
+
+/*====================================================
+LABORATORIO
+====================================================*/
+
+#laboratorio{
+
+    left:430px;
+
+    top:310px;
+
+    width:200px;
+
+    height:130px;
+
+    background:#4a4a4a;
+
+    border:6px solid #222;
+
+    border-radius:10px;
+
+}
+
+#laboratorio::before{
+
+    content:"🧪 🧪";
+
+    position:absolute;
+
+    top:20px;
+
+    left:35px;
+
+    font-size:42px;
+
+}
+
+#laboratorio::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-20px;
+
+    left:15px;
+
+    width:160px;
+
+    height:20px;
+
+    background:#5b3c20;
+
+}
+
+/*====================================================
+VENTANA
+====================================================*/
+
+#ventana{
+
+    left:870px;
+
+    top:95px;
+
+    width:190px;
+
+    height:170px;
+
+    background:linear-gradient(#bce8ff,#eaf9ff);
+
+    border:8px solid #444;
+
+    border-radius:4px;
+
+}
+
+#ventana::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    top:0;
+
+    width:6px;
+
+    height:100%;
+
+    background:#555;
+
+    transform:translateX(-50%);
+
+}
+
+#ventana::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:50%;
+
+    left:0;
+
+    width:100%;
+
+    height:6px;
+
+    background:#555;
+
+    transform:translateY(-50%);
+
+}
+
+/*====================================================
+INTERRUPTOR
+====================================================*/
+
+#interruptor{
+
+    position:absolute;
+
+    left:320px;
+
+    top:330px;
+
+    width:32px;
+
+    height:55px;
+
+    background:#d9d9d9;
+
+    border:3px solid #666;
+
+    border-radius:4px;
+
+}
+
+#interruptor::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:10px;
+
+    top:10px;
+
+    width:8px;
+
+    height:25px;
+
+    background:#666;
+
+}
+
+/*====================================================
+PUERTA
+====================================================*/
+
+#puerta{
+
+    left:1040px;
+
+    top:180px;
+
+    width:120px;
+
+    height:410px;
+
+    background:linear-gradient(to right,#16314f,#295b8b,#16314f);
+
+    border:8px solid #555;
+
+    border-radius:6px;
+
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+
+}
+
+#puerta::before{
+
+    content:"";
+
+    position:absolute;
+
+    right:15px;
+
+    top:190px;
+
+    width:16px;
+
+    height:16px;
+
+    border-radius:50%;
+
+    background:gold;
+
+}
+
+#puerta::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:-30px;
+
+    top:140px;
+
+    width:22px;
+
+    height:70px;
+
+    background:#111;
+
+    border:3px solid #555;
+
+    border-radius:5px;
+
+}
+
+/*====================================================
+PANEL NUMÉRICO
+====================================================*/
+
+#panelLector{
+
+    position:absolute;
+
+    left:995px;
+
+    top:290px;
+
+    width:30px;
+
+    height:80px;
+
+    background:#1a1a1a;
+
+    border:3px solid #555;
+
+    border-radius:5px;
+
+}
+
+#panelLector::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:8px;
+
+    top:10px;
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:red;
+
+    box-shadow:
+    0 18px lime,
+    0 36px cyan;
+
+}
+/*====================================================
+QR CAMUFLADOS
+====================================================*/
+
+.qr{
+
+    position:absolute;
+
+    width:18px;
+
+    height:18px;
+
+    display:none;          /* Se muestran únicamente cuando se desbloquean */
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:2px;
+
+    background-image:url("imagenes/qr-mini.png");
+
+    background-size:cover;
+
+    background-repeat:no-repeat;
+
+    opacity:.18;
+
+    transition:.25s;
+
+    z-index:20;
+
+}
+
+.qr:hover{
+
+    opacity:.95;
+
+    transform:scale(1.6);
+
+    box-shadow:0 0 12px cyan;
+
+}
+
+/*====================================================
+QR DEL PISO
+====================================================*/
+
+#qr1{
+
+    left:760px;
+
+    top:612px;
+
+    opacity:.22;
+
+}
+
+/*====================================================
+QR CERCA DEL INTERRUPTOR
+====================================================*/
+
+#qr2{
+
+    left:335px;
+
+    top:350px;
+
+    opacity:.14;
+
+}
+
+/*====================================================
+QR DEBAJO DEL ESCRITORIO
+====================================================*/
+
+#qr3{
+
+    left:720px;
+
+    top:525px;
+
+    opacity:.16;
+
+}
+
+/*====================================================
+QR EN LA ESQUINA DE LA VENTANA
+====================================================*/
+
+#qr4{
+
+    left:1038px;
+
+    top:108px;
+
+    opacity:.12;
+
+}
+
+/*====================================================
+MODALES
+====================================================*/
+
+.modal{
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    width:100%;
+
+    height:100%;
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(0,0,0,.82);
+
+    z-index:999;
+
+}
+
+.contenidoModal,
+.contenidoQR,
+.contenidoPuerta,
+.contenidoFinal{
+
+    width:680px;
+
+    max-width:92%;
+
+    background:#ffffff;
+
+    color:#222;
+
+    border-radius:18px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:
+
+    0 0 40px rgba(0,0,0,.7);
+
+    animation:aparecer .35s;
+
+}
+
+/*====================================================
+ANIMACIÓN
+====================================================*/
+
+@keyframes aparecer{
+
+    from{
+
+        transform:scale(.75);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+
+    }
+
+}
+
+/*====================================================
+TÍTULOS
+====================================================*/
+
+.contenidoModal h2,
+.contenidoQR h2,
+.contenidoPuerta h2,
+.contenidoFinal h1{
+
+    color:#0b4f6c;
+
+    margin-bottom:20px;
+
+}
+
+/*====================================================
+PREGUNTA
+====================================================*/
+
+#preguntaMision{
+
+    font-size:22px;
+
+    line-height:34px;
+
+    margin-bottom:30px;
+
+}
+
+/*====================================================
+RESPUESTAS
+====================================================*/
+
+.respuesta{
+
+    width:100%;
+
+    margin:10px 0;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#0b4f6c;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.respuesta:hover{
+
+    background:#1879c9;
+
+    transform:scale(1.02);
+
+}
+
+/*====================================================
+BOTONES
+====================================================*/
+
+.cerrarModal,
+.contenidoQR button,
+.contenidoPuerta button,
+.contenidoFinal button{
+
+    margin-top:20px;
+
+    padding:14px 34px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#1565c0;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.cerrarModal:hover,
+.contenidoQR button:hover,
+.contenidoPuerta button:hover,
+.contenidoFinal button:hover{
+
+    background:#0b4f6c;
+
+}
+
+/*====================================================
+CAJA DEL CÓDIGO
+====================================================*/
+
+#codigoPuerta{
+
+    width:220px;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-size:28px;
+
+    letter-spacing:12px;
+
+    border-radius:10px;
+
+    border:3px solid #0b4f6c;
+
+}
+
+/*====================================================
+QR MOSTRADO
+====================================================*/
+
+#imagenQR{
+
+    width:220px;
+
+    display:block;
+
+    margin:20px auto;
+
+}
+
+/*====================================================
+ESTADÍSTICAS
+====================================================*/
+
+.estadisticas{
+
+    background:#f1f5f9;
+
+    border-radius:10px;
+
+    padding:20px;
+
+    margin:25px 0;
+
+}
+
+.estadisticas p{
+
+    font-size:22px;
+
+    margin:12px;
+
+}
+
+.estadisticas span{
+
+    color:#1565c0;
+
+    font-weight:bold;
+
+}
+
+/*====================================================
+EFECTOS
+====================================================*/
+
+#puerta:hover{
+
+    box-shadow:0 0 25px #4fc3f7;
+
+}
+
+#ventana:hover{
+
+    box-shadow:0 0 25px #8be9ff;
+
+}
+
+#computadora:hover{
+
+    box-shadow:0 0 25px #00e5ff;
+
+}
+
+#laboratorio:hover{
+
+    box-shadow:0 0 25px #00ff99;
+
+}
+
+#librero:hover{
+
+    box-shadow:0 0 25px #ffcc80;
+
+}
+
+/*====================================================
+RESPONSIVE
+====================================================*/
+
+@media(max-width:1300px){
+
+    .escenario{
+
+        transform:scale(.88);
+
+    }
+
+}
+
+@media(max-width:1100px){
+
+    .escenario{
+
+        transform:scale(.72);
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    .panelSuperior{
+
+        flex-direction:column;
+
+        height:auto;
+
+        gap:15px;
+
+        padding:20px;
+
+    }
+
+    .barraJuego{
+
+        flex-direction:column;
+
+        gap:18px;
+
+    }
+
+    .progreso{
+
+        width:90%;
+
+    }
+
+}
