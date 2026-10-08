@@ -43,7 +43,7 @@ window.onload = function () {
 // ============================
 
 function reproducirSonido() {
-
+3
     if (sonido) {
 
         sonido.currentTime = 0;
